@@ -1,6 +1,13 @@
 # Administrator Linux Professional
 
-[[_TOC_]]
+- [Administrator Linux Professional](#administrator-linux-professional)
+  - [Описание](#описание)
+    - [С чего начинается Linux](#с-чего-начинается-linux)
+    - [Краткое содержание](#краткое-содержание)
+  - [Домашнее задание](#домашнее-задание)
+  - [Шаги выполнения](#шаги-выполнения)
+    - [Mainline](#mainline)
+    - [Кастомная сборка](#кастомная-сборка)
 
 ## Описание
 
@@ -76,18 +83,35 @@ sudo chmod 700 ./make_new_core.sh && ./make_new_core.sh
 Для этого в сборке отключаю (безопасно через скрипт `scripts/config`):
 
 ```bash
-scripts/config --disable SYSTEM_TRUSTED_KEYS
-scripts/config --disable BUILT_IN_CERTIFICATE
-scripts/config --disable MODULE_SIG
-scripts/config --disable MODULE_SIG_FORCE
-scripts/config --disable MODULE_SIG_ALL
-scripts/config --disable MODULE_SIG_SHA1
-scripts/config --disable MODULE_SIG_SHA256
-scripts/config --disable MODULE_SIG_SHA384
-scripts/config --disable MODULE_SIG_SHA512
-scripts/config --disable MODULE_SIG_SHA3_256
-scripts/config --disable MODULE_SIG_SHA3_384
-scripts/config --disable MODULE_SIG_SHA3_512
-scripts/config --disable MODULE_SIG_KEY_TYPE_RSA
-scripts/config --disable MODULE_SIG_KEY_TYPE_ECDSA
+scripts/config --disable CONFIG_MODULE_SIG
+scripts/config --disable CONFIG_MODULE_SIG_FORCE
+scripts/config --disable CONFIG_EFI_SECURE_BOOT
+scripts/config --disable CONFIG_LOCK_DOWN_IN_EFI_SECURE_BOOT
+scripts/config --disable CONFIG_SECURITY_LOCKDOWN_LSM
+scripts/config --disable CONFIG_SECURITY_LOCKDOWN_LSM_EARLY
+scripts/config --disable CONFIG_SYSTEM_TRUSTED_KEYRING
+scripts/config --disable CONFIG_SYSTEM_TRUSTED_KEYS
+scripts/config --disable CONFIG_SYSTEM_REVOCATION_KEYS
+scripts/config --disable CONFIG_INTEGRITY
+scripts/config --disable CONFIG_IMA
+scripts/config --disable CONFIG_IMA_APPRAISE
+scripts/config --disable CONFIG_MODULE_SIG_KEY_TYPE_RSA
+scripts/config --disable CONFIG_MODULE_SIG_KEY_TYPE_ECDSA
+scripts/config --undefine CONFIG_MODULE_SIG_KEY
+scripts/config --undefine CONFIG_MODULE_SIG_HASH
+```
+
+Также при сборке ядра выяснились проблемы с BTF. Тоже лучше отключить
+
+```bash
+scripts/config --disable CONFIG_DEBUG_INFO_BTF_MODULES
+scripts/config --disable CONFIG_PAHOLE_HAS_SPLIT_BTF
+scripts/config --disable CONFIG_DEBUG_INFO_DWARF5
+scripts/config --disable CONFIG_DEBUG_INFO_BTF_MODULES
+scripts/config --disable CONFIG_CGROUP_BPF
+scripts/config --disable CONFIG_BPF
+scripts/config --disable CONFIG_BPF_SYSCALL
+scripts/config --disable CONFIG_DEBUG_INFO_NONE
+scripts/config --enable  CONFIG_DEBUG_INFO_DWARF4
+scripts/config --enable  CONFIG_DEBUG_INFO_BTF
 ```
